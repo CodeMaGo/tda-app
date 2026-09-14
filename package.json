@@ -1,0 +1,25 @@
+{
+  "name": "tda-platform",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Technical Decision Authority Platform - multi-tenant technical governance and decision knowledge platform",
+  "workspaces": ["packages/*", "api", "web"],
+  "engines": { "node": ">=20 <23" },
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:web dev:api",
+    "dev:web": "npm run dev -w web",
+    "dev:api": "npm run start -w api",
+    "build": "npm run build -w @tda/shared && npm run build -w @tda/db && npm run build -w api && npm run build -w web",
+    "typecheck": "tsc -b --pretty",
+    "lint": "eslint .",
+    "db:generate": "npm run generate -w @tda/db",
+    "db:migrate": "npm run migrate -w @tda/db",
+    "db:seed": "npm run seed -w @tda/db",
+    "test": "npm run test -w api"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.2"
+  }
+}

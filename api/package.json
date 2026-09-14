@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist",
+    "prestart": "npm run build",
+    "start": "func start",
+    "test": "node --test --experimental-strip-types src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.717.0",
+    "@aws-sdk/s3-request-presigner": "^3.717.0",
+    "@azure/functions": "^4.6.0",
+    "@tda/db": "*",
+    "@tda/shared": "*",
+    "drizzle-orm": "^0.38.3",
+    "jose": "^5.9.6",
+    "postgres": "^3.4.5",
+    "resend": "^4.0.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+
+    "DATABASE_URL": "postgresql://tda_app:password@db.<project>.supabase.co:6543/postgres",
+    "DATABASE_POOL_MAX": "4",
+
+    "SUPABASE_URL": "https://<project>.supabase.co",
+    "SUPABASE_JWT_ISSUER": "https://<project>.supabase.co/auth/v1",
+    "SUPABASE_SERVICE_ROLE_KEY": "<service-role-key>",
+
+    "R2_ACCOUNT_ID": "<cloudflare-account-id>",
+    "R2_BUCKET": "tda-evidence",
+    "R2_ACCESS_KEY_ID": "<access-key>",
+    "R2_SECRET_ACCESS_KEY": "<secret>",
+
+    "RESEND_API_KEY": "<resend-key>",
+    "EMAIL_FROM": "TDA Platform <tda@example.com>",
+    "APP_BASE_URL": "http://localhost:3000",
+
+    "PDF_RENDERER_URL": ""
+  },
+  "Host": { "CORS": "http://localhost:3000", "CORSCredentials": true }
+}

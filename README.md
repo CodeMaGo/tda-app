@@ -85,6 +85,10 @@ alter default privileges in schema public
 
 Use that role in `DATABASE_URL`.
 
+Two connection strings, two roles. `tda_app` runs the application and nothing else: it cannot bypass RLS and holds no DDL rights, so it cannot run migrations. Migrations and seeding create schemas, triggers and RLS policies, and write across organisations, so they connect as an owning role — Supabase's `postgres` user, from Project Settings → Database. Keep them apart: an application that can rewrite its own schema is an application whose RLS boundary is advisory.
+
+If either password contains characters that are reserved in URLs (`#`, `/`, `?`, `@`, `:`), percent-encode them — `#` becomes `%23`. An unencoded `#` silently truncates the connection string and surfaces as `Invalid URL`.
+
 ### 4. Environment
 
 Copy `api/local.settings.json.example` to `api/local.settings.json` and fill it in:
@@ -104,7 +108,16 @@ Then `cp web/.env.local.example web/.env.local` and set the Supabase URL and ano
 
 ### 5. Migrate and seed
 
+Both scripts read `MIGRATION_DATABASE_URL` from the environment. `api/local.settings.json` is read by the Azure Functions host alone — plain Node scripts never see it — so set the variable in your shell:
+
 ```bash
+export MIGRATION_DATABASE_URL='postgresql://postgres:...@db.<project>.supabase.co:5432/postgres'
+npm run db:migrate
+npm run db:seed
+```
+
+```powershell
+$env:MIGRATION_DATABASE_URL = 'postgresql://postgres:...@db.<project>.supabase.co:5432/postgres'
 npm run db:migrate
 npm run db:seed
 ```
@@ -190,7 +203,9 @@ The interface is deliberately not a SaaS card kit. It reads as an engineering re
 
 Set these GitHub secrets:
 
-`AZURE_STATIC_WEB_APPS_API_TOKEN`, `DATABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+`AZURE_STATIC_WEB_APPS_API_TOKEN`, `MIGRATION_DATABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+CI only runs migrations, so it takes `MIGRATION_DATABASE_URL` (the owning role) and not `DATABASE_URL`. The API's own `DATABASE_URL`, using `tda_app`, is set in the Azure portal alongside the other runtime settings.
 
 Set the API's runtime settings in the Azure portal under the Static Web App's configuration.
 

@@ -37,7 +37,7 @@ jobs:
         if: github.event_name == 'push'
         run: npm run db:migrate
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MIGRATION_DATABASE_URL: ${{ secrets.MIGRATION_DATABASE_URL }}
 
       - name: Deploy
         uses: Azure/static-web-apps-deploy@v1

@@ -13,7 +13,12 @@ import { eq } from 'drizzle-orm';
 import { createDatabase } from './client.js';
 import * as s from './schema/index.js';
 
-const db = createDatabase();
+// Seeding writes across every organisation, which the RLS policies forbid for
+// `tda_app`, so it uses the same owning role as the migrations.
+const seedUrl = process.env.MIGRATION_DATABASE_URL;
+if (!seedUrl) throw new Error('MIGRATION_DATABASE_URL is not set');
+
+const db = createDatabase(seedUrl);
 
 const people = [
   { name: 'Jane Smith', email: 'jane.smith@acme.test', jobTitle: 'Principal Engineer', roles: ['decision_owner', 'contributor'] as const },

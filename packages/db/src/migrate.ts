@@ -12,8 +12,11 @@ import postgres from 'postgres';
 const here = dirname(fileURLToPath(import.meta.url));
 
 async function main() {
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error('DATABASE_URL is not set');
+  // Not DATABASE_URL: that is the API's `tda_app` role, which is deliberately
+  // nobypassrls and has no DDL rights. Migrations create schemas, triggers and
+  // RLS policies, so they need an owning role.
+  const url = process.env.MIGRATION_DATABASE_URL;
+  if (!url) throw new Error('MIGRATION_DATABASE_URL is not set');
 
   const sql = postgres(url, { max: 1, prepare: false });
   const db = drizzle(sql);
